@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.nf.carsys.dao.EmployeesDao">
+    <resultMap id="employeesMap" type="edu.nf.carsys.entity.Employees">
+        <id property="employId" column="employe_id"/>
+        <result property="employName" column="employe_name"/>
+        <result property="employCard" column="employe_card"/>
+        <result property="employPhone" column="employe_phone"/>
+        <result property="posid" column="posid"/>
+        <result property="employMali" column="employe_mail"/>
+        <result property="employTime" column="employe_time"/>
+        <result property="pass" column="pass"/>
+    </resultMap>
+
+    <select id="getEmployees" resultMap="employeesMap">
+        SELECT * FROM employe_info
+    </select>
+
+    <delete id="deleteEmployees" parameterType="integer">
+        delete from employe_info where employe_id in
+        <foreach collection="array" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="insertEmployees" parameterType="edu.nf.carsys.entity.Employees">
+        insert into employe_info(employe_name,employe_card,employe_phone,posid,employe_mail,employe_time)
+        values(#{employName},#{employCard},#{employPhone},#{posid},#{employMali},#{employTime})
+    </insert>
+
+    <select id="getById" resultMap="employeesMap" parameterType="integer">
+         SELECT * FROM employe_info where employe_id=#{id}
+    </select>
+
+    <update id="updateEmployees" parameterType="edu.nf.carsys.entity.Employees">
+        update employe_info
+        <trim prefix="set" suffixOverrides=",">
+                <if test="employName != null and employName!=''">
+                    employe_name=#{employName},
+                </if>
+                <if test="employCard != null and employCard!=''">
+                    employe_card=#{employCard},
+                </if>
+                <if test="employPhone != null and employPhone!=''">
+                    employe_phone=#{employPhone},
+                </if>
+                <if test="posid != null and posid!=''">
+                    posid=#{posid},
+                </if>
+                <if test="employMali != null and employMali!=''">
+                    employe_mail=#{employMali},
+                </if>
+                <if test="employTime != null and employTime!=''">
+                    employe_time=#{employTime},
+                </if>
+               <if test="pass != null and pass!=''">
+                   pass=#{pass}
+               </if>
+        </trim>
+       <where>
+           employe_id = #{employId}
+       </where>
+
+    </update>
+
+    <select id="getByName" resultMap="employeesMap" parameterType="string">
+        SELECT * FROM employe_info where employe_name=#{name}
+    </select>
+
+</mapper>

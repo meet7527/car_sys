@@ -1,0 +1,28 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/cardb?serverTimezone=GMT&useUnicode=true&characterEncoding=utf-8
+    username: test
+    password: test
+    druid:
+      max-active: 200
+      initial-size: 5
+      min-idle: 5
+      max-wait: 1000
+      min-evictable-idle-time-millis: 300000
+      time-between-eviction-runs-millis: 600000
+      test-while-idle: true
+      test-on-return: false
+      pool-prepared-statements: false
+      validation-query: select 1
+      test-on-borrow: false
+mybatis:
+  type-aliases-package: edu.nf.carsys.entity
+  mapper-locations: classpath:/mapper/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  #分页
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true

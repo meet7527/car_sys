@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.nf.carsys.dao.CarUserDao">
+    <resultMap id="carMapper" type="edu.nf.carsys.entity.CarUser">
+        <result property="carId" column="car_id"/>
+        <result property="userName" column="user_Name"/>
+        <result property="userTel" column="user_tel"/>
+        <result property="userCard" column="user_card"/>
+        <result property="stopTime" column="stop_time"/>
+        <result property="carVip" column="car_vip"/>
+        <result property="portNum" column="port_num"/>
+    </resultMap>
+
+    <select id="getListUser" resultMap="carMapper">
+        select car_id,user_Name,user_tel,user_card,stop_time,car_vip,port_num from carUser_info
+    </select>
+
+    <delete id="deleteUser" parameterType="string">
+        delete from caruser_info where car_id in
+        <foreach collection="array" item="id" open="(" close=")" separator=",">
+             #{id}
+        </foreach>
+    </delete>
+
+    <insert id="addUser" parameterType="edu.nf.carsys.entity.CarUser">
+        INSERT into carUser_info(car_id,user_Name,user_tel,user_card,stop_time,car_vip,port_num)
+        values(#{carId},#{userName},#{userTel},#{userCard},#{stopTime},#{carVip},#{portNum})
+    </insert>
+
+    <select id="getUserById" resultMap="carMapper" parameterType="string">
+        select car_id,user_Name,user_tel,user_card,stop_time,car_vip,port_num from carUser_info
+        <where>
+            <if test="id!=null and id!=''">
+                car_id=#{id}
+            </if>
+        </where>
+
+    </select>
+
+    <update id="update" parameterType="edu.nf.carsys.entity.CarUser">
+        update carUser_info set user_name=#{userName},user_tel=#{userTel},
+        user_card=#{userCard},stop_time=#{stopTime},car_vip=#{carVip},
+        port_num=#{portNum} where car_id=#{carId}
+    </update>
+
+    <select id="getListVip" resultMap="carMapper">
+        select car_id,user_Name,user_tel,user_card,stop_time,car_vip,port_num from carUser_info where car_vip="是"
+    </select>
+    
+    <update id="updateVipState" parameterType="edu.nf.carsys.entity.CarUser">
+        update carUser_info set vip_state = ${vipState} where car_id=#{carId}
+    </update>
+
+
+</mapper>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.nf.carsys.dao.AdminLogin">
+    <resultMap id="adminMap" type="edu.nf.carsys.entity.Admin">
+        <result property="id" column="id"/>
+        <result property="userName" column="userName"/>
+        <result property="pass" column="pass"/>
+        <result property="identity" column="u_identity"/>
+    </resultMap>
+
+    <select id="adminLogin" resultMap="adminMap" parameterType="edu.nf.carsys.entity.Admin">
+        select * from admin_info where userName=#{userName} and pass=#{pass}
+    </select>
+
+    <insert id="addAdmin" parameterType="edu.nf.carsys.entity.Admin">
+        insert into admin_info(userName,pass,u_identity) values(#{userName},'123',#{identity})
+    </insert>
+
+    <delete id="deleteAdmin" parameterType="string">
+        delete from admin_info where id in
+        <foreach collection="array" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="updateAdmin" parameterType="edu.nf.carsys.entity.Admin">
+        update admin_info
+        <trim prefix="set" suffixOverrides=",">
+            <if test="userName != null and userName !=''">
+                userName=#{userName},
+            </if>
+            <if test="identity != null and identity !=''">
+               u_identity=#{identity},
+            </if>
+            <if test="pass != null and pass !=''">
+                pass=${pass}
+            </if>
+        </trim>
+        <where>
+            id=#{id}
+        </where>
+
+    </update>
+
+</mapper>

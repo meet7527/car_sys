@@ -1,0 +1,232 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <script src="js/jquery-1.12.4.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.css"/>
+    <link rel="stylesheet" href="css/pagination.css"/>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/jquery.pagination.js"></script>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="js/html5shiv.js"></script>
+    <script type="text/javascript" src="js/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="css/static/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/static/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="css/Hui-iconfont/1.0.8/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="css/static/h-ui.admin/skin/default/skin.css" id="skin" />
+    <link rel="stylesheet" type="text/css" href="css/static/h-ui.admin/css/style.css" />
+    <!--[if IE 6]>
+    <script type="text/javascript" src="js/DD_belatedPNG_0.0.8a-min.js" ></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <title>预约列表</title>
+    <style type="text/css">
+        .content{width:80%;margin:200px auto;}
+        .hide_box{z-index:999;filter:alpha(opacity=50);background:#666;opacity: 0.5;-moz-opacity: 0.5;left:0;top:0;height:99%;width:100%;position:fixed;display:none;}
+        .shang_box{width:540px;height:540px;padding:10px;background-color:#fff;border-radius:10px;position:fixed;z-index:1000;left:50%;top:50%;margin-left:-280px;margin-top:-280px;border:1px dotted #dedede;display:none;}
+        .shang_box img{border:none;border-width:0;}
+        .dashang{display:block;width:100px;margin:5px auto;height:25px;line-height:25px;padding:10px;background-color:#E74851;color:#fff;text-align:center;text-decoration:none;border-radius:10px;font-weight:bold;font-size:16px;transition: all 0.3s;}
+        .dashang:hover{opacity:0.8;padding:15px;font-size:18px;}
+        .shang_close{float:right;display:inline-block;}
+        .shang_logo{display:block;text-align:center;margin:20px auto;}
+        .shang_tit{width: 100%;height: 75px;text-align: center;line-height: 66px;color: #a3a3a3;font-size: 16px;background: url('img/cy-reward-title-bg.jpg');font-family: 'Microsoft YaHei';margin-top: 7px;margin-right:2px;}
+        .shang_tit p{color:#a3a3a3;text-align:center;font-size:16px;}
+        .shang_payimg{width:163px;padding:10px;border:6px solid #EA5F00;margin:0 auto;border-radius:3px;height:160px;}
+        .shang_payimg img{display:block;text-align:center;width:135px;height:135px; }
+        .pay_explain{text-align:center;margin:10px auto;font-size:20px;color:#080808;}
+        .radiobox{width: 16px;height: 16px;background: url('img/radio2.jpg');display: block;float: left;margin-top: 5px;margin-right: 14px;}
+        .checked .radiobox{background:url('img/radio1.jpg');}
+        .shang_payselect{text-align:center;margin:0 auto;margin-top:40px;cursor:pointer;height:60px;width:280px;}
+        .shang_payselect .pay_item{display:inline-block;margin-right:10px;float:left;}
+        .shang_info{clear:both;}
+        .shang_info p,.shang_info a{color:#C3C3C3;text-align:center;font-size:12px;text-decoration:none;line-height:2em;}
+    </style>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 停车管理 <span class="c-gray en">&gt;</span> 停车区列表 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.reload()" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+    <div class="text-c">
+        <input type="text" class="input-text" style="width:250px" placeholder="输入位号" id="portId" name="">
+        <button type="button" class="btn btn-success radius" id="carBtn" name=""><i class="Hui-iconfont">&#xe665;</i> 搜用户</button>
+    </div>
+    <div class="cl pd-5 bg-1 bk-gray mt-20">
+        <span class="l">
+        <a href="javascript:;" onclick="delUser(this)" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>
+        <a href="javascript:;" onclick="order_add('添加预约','order-add.html','800','500')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加预约</a></span>
+        <span class="r">共有数据：<strong id="numT">54</strong> 条</span> </div>
+    <div class="mt-20">
+        <form id="uid">
+            <table id="tab1" class="table table-border table-bordered table-bg table-hover table-sort">
+                <thead>
+                <tr class="text-c">
+                    <th width="40"><input name="" type="checkbox" value=""></th>
+                    <th width="80">CARID</th>
+                    <th width="100">姓名</th>
+                    <th width="100">电话</th>
+                    <th width="150">更新时间</th>
+                    <th width="150">车位号</th>
+                    <th width="80">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </form>
+        <div id="page" style="float: right;"></div>
+    </div>
+</div>
+
+
+<script>
+    $(function () {
+        $.ajax({
+            url:"get_orderList",
+            type:"post",
+            data:{"pageNum":1,"pageSize":5},
+            success:function (result) {
+                console.log(result);
+                if(result.code==200){
+                    $("#numT").text(result.data.total)
+                    addTable(result.data.list);
+                    page(result.data)
+                    //location.reload();
+                }else {
+                    layer.msg(result.message,{icon:2,time:1000});
+                }
+            }
+        })
+    })
+    function page(pageInfo){
+        $("#page").pagination(pageInfo.total,{ //第一个参数指定共多少条记录
+            items_per_page:pageInfo.pageSize, // 每页显示多少条记录
+            next_text:">", //下一页按钮图标
+            prev_text:"<", //上一页按钮图标
+            num_display_entries:5,//主体页数
+            num_edge_entries: 2, //边缘页数
+            callback: function(index){//定义一个回调函数，用于每次点击页码发起分页查询请求
+                //index为当前页码，只不过下标是从0开始，因此需要+1操作
+                var pageNum = ++index;
+                $.ajax({
+                    url : 'get_orderList',
+                    method : 'post',
+                    data : {'pageNum' : pageNum, 'pageSize' : 5},
+                    success : function(result){
+                        //渲染表格
+                        addTable(result.data.list);
+                    }
+                });
+            }
+        });
+    }
+    function addTable(result) {
+        $('#tab1 tr:not(:first)').remove();
+        $.each(result,function (index,val) {
+            $("#tab1").append("<tr>" +
+                "<td><input name='id' id='u'  type='checkbox' value='"+val.orderId+"'></td>"+
+                "<td>"+val.orderId+"</td>" +
+                "<td>"+val.orderUserName+"</td>" +
+                "<td>"+val.orderPhoneNum+"</td>" +
+                "<td>"+val.orderTime+"</td>" +
+                "<td id='port' class='text-c'>"+val.portNum+"</td>"+
+                "<td>" +
+                " <a title='转正' href=\"javascript:;\" onclick=\"order_update('转正','order-update.html?id="+val.orderId+"&port="+val.portNum+"','800','500')\" ><i class=\"Hui-iconfont\">&#xe6df;</i></a> " +
+                " <a style=\"text-decoration:none\" class=\"ml-5\" onClick=\"picture_del(this,'"+val.orderId+"','"+val.portNum+"')\" href=\"javascript:;\" title=\"删除\"><i class=\"Hui-iconfont\">&#xe6e2;</i></a> " +
+
+                "</td>"+
+                "</tr>")
+
+        })
+    }
+    function delUser(obj) {
+        layer.confirm('确认要删除吗？',function(index) {
+            $.ajax({
+                url: "delete_order",
+                data: $("#uid").serialize(),
+                type: "post",
+                success: function (result) {
+                    if (result.code == 200) {
+                        layer.msg(result.message, {icon: 6, time: 500}, function () {
+                            location.reload();
+                        });
+                        //location.replace(location.href);
+                    } else {
+                        layer.msg(result.message, {icon: 2, time: 500});
+                    }
+                }
+            })
+        })
+    }
+    $("#carBtn").on("click",function () {
+        $.ajax({
+            url:"get_orderByPort",
+            data:{"port":$("#portId").val()},
+            type:"post",
+            success:function (val) {
+                if(val.code==200){
+                    $('#tab1 tr:not(:first)').remove();
+                    $("#tab1").append("<tr>" +
+                        "<td><input name='id' id='u'  type='checkbox' value='"+val.data.orderId+"'></td>"+
+                        "<td>"+val.data.orderId+"</td>" +
+                        "<td>"+val.data.orderUserName+"</td>" +
+                        "<td>"+val.data.orderPhoneNum+"</td>" +
+                        "<td>"+val.data.orderTime+"</td>" +
+                        "<td id='port' class='text-c'>"+val.data.portNum+"</td>"+
+                        "<td>" +
+                        " <a title='编辑' href=\"javascript:;\" onclick=\"order_update('修改预约客户信息','order-update.html?id="+val.data.orderId+"&port="+val.data.portNum+"','800','500')\" ><i class=\"Hui-iconfont\">&#xe6df;</i></a> " +
+                        " <a style=\"text-decoration:none\" class=\"ml-5\" onClick=\"picture_del(this,'"+val.data.orderId+"','"+val.data.portNum+"')\" href=\"javascript:;\" title=\"删除\"><i class=\"Hui-iconfont\">&#xe6e2;</i></a> " +
+                        "</td>"+
+                        "</tr>")
+                }else {
+                    layer.msg(result.message.employCard,{icon:2,time:500});
+                }
+            }
+        })
+    })
+
+
+</script>
+<!--_footer 作为公共模版分离出去-->
+<!--<script type="text/javascript" src="js/jquery/1.9.1/jquery.min.js"></script>-->
+<script type="text/javascript" src="js/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="css/static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="css/static/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="js/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="js/datatables/1.10.0/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="js/laypage/1.2/laypage.js"></script>
+<script type="text/javascript">
+
+    /*图片-删除*/
+    function picture_del(obj,id,port){
+        layer.confirm('确认要删除吗？',function(index){
+            $.ajax({
+                type: 'POST',
+                url: 'delete_order',
+                data:{"id":id,"port":port},
+                dataType: 'json',
+                success: function(data){
+                    $(obj).parents("tr").remove();
+                    layer.msg(data.message,{icon:1,time:1000});
+                },
+                error:function(data) {
+                    console.log(data.message);
+                },
+            });
+        });
+    }
+    function order_add(title,url,w,h){
+        layer_show(title,url,w,h);
+    }
+
+    function order_update(title,url,w,h){
+        layer_show(title,url,w,h);
+    }
+</script>
+</body>
+</html>

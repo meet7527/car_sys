@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.nf.carsys.dao.CarRnbDao">
+    <resultMap id="carCodeMap" type="edu.nf.carsys.entity.CarRnb">
+        <id property="id" column="id"/>
+        <result property="phoneNum" column="phoneNum"/>
+        <result property="userName" column="userName"/>
+        <result property="money" column="money"/>
+        <result property="car_id" column="car_id"/>
+        <result property="car_vip" column="car_vip"/>
+        <result property="stopTime" column="stop_time"/>
+    </resultMap>
+
+    <select id="getCarCodeList" resultMap="carCodeMap">
+        select * from carrnb_info
+    </select>
+
+    <select id="getCarCodeByName" resultMap="carCodeMap" parameterType="string">
+        select * from carrnb_info where car_id = #{carId}
+    </select>
+
+    <delete id="deleteCarCode" parameterType="string">
+        delete from carrnb_info where car_id in
+        <foreach collection="array" item="carId" open="(" close=")" separator=",">
+            #{carId}
+        </foreach>
+    </delete>
+
+    <insert id="insertCarCode" parameterType="edu.nf.carsys.entity.CarRnb">
+        insert into carrnb_info(phoneNum,userName,money,car_id,car_vip,stop_time) values
+        (#{phoneNum},#{userName},#{money},#{car_id},#{car_vip},#{stopTime})
+    </insert>
+
+    <update id="updateCarCode" parameterType="edu.nf.carsys.entity.CarRnb">
+        update carrnb_info set phoneNum = #{phoneNum},userName=#{userName},
+         car_vip=#{car_vip},stop_time=#{stopTime} where car_id = #{car_id}
+    </update>
+</mapper>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.nf.carsys.dao.OrderDao">
+
+    <resultMap id="orderMap" type="edu.nf.carsys.entity.Order">
+        <id property="orderId" column="order_id"/>
+        <result property="orderUserName" column="order_userName"/>
+        <result property="orderPhoneNum" column="order_phonenum"/>
+        <result property="orderTime" column="order_time"/>
+        <result property="portNum" column="port_num"/>
+    </resultMap>
+
+    <select id="getOrderList" resultMap="orderMap">
+        select * from order_info
+    </select>
+
+    <insert id="addOrder" parameterType="edu.nf.carsys.entity.Order">
+        insert into order_info(order_userName,order_phonenum,order_time,port_num)
+        values(#{orderUserName},#{orderPhoneNum},#{orderTime},#{portNum})
+    </insert>
+
+    <delete id="deleteOrder" parameterType="integer">
+        delete from order_info where order_id in
+        <foreach collection="array" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteOrder2" parameterType="string">
+        delete from order_info where port_num = #{portNum}
+    </delete>
+
+    <select id="getOrderById" parameterType="integer" resultMap="orderMap">
+        select * from order_info where order_id = #{id}
+    </select>
+
+    <update id="updateOrder" parameterType="edu.nf.carsys.entity.Order">
+        update order_info set order_userName =#{orderUserName},order_phonenum=#{orderPhoneNum},
+        order_time=#{orderTime},port_num=#{portNum} where order_id = #{orderId}
+    </update>
+
+    <select id="getOrderByPort" parameterType="string" resultMap="orderMap">
+        select * from order_info where port_num = #{portNum}
+    </select>
+
+</mapper>
